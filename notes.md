@@ -107,6 +107,7 @@ https://twig.symfony.com/
 - concaténation: ~ ''
 - faire des liens vers une route du projet: (on utilise les names)
 <a href="{{ path('nom_route') }}"></a>
+- faire les liens au css..tout ce qui est dans public : on utilise la méthode asset('')
 
 ## Récupérer les objets de la base de données
 ### lister les entreprises
