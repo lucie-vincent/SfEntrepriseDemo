@@ -12,7 +12,7 @@
         {# <b>{{ entreprise.raisonSociale }}</b> {{' (' ~ entreprise.cp ~ ' ' ~ entreprise.ville ~ ')' }}<br> #}
         
         {# on a utilisé la méthode magique __toString donc on peut afficher la raison sociale + cp + ville #}
-        {{ entreprise}}<br>
+        <a href="{{ path('show_entreprise', {'id': entreprise.id}) }}">{{ entreprise}}</a><br>
     {% endfor %}
 
 {% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail d'une entreprise{% endblock %}
+
+{% block body %}
+    <h1>Détail d'une entreprise</h1>
+
+    <h2> {{ entreprise }}</h2>
+    <p>
+        {# Adresse : {{entreprise.adresse }} {{ entreprise.cp }} {{entreprise.ville}} #}
+        {# on utilise la méthode getAdresseComplete créée dans l'entité pour afficher l'adresse complète #}
+        Adresse : {{ entreprise.adresseComplete }} <br>
+        Date de création : {{ entreprise.dateCreation | date("d-m-Y") }}
+    </p>
+   
+    <h2> Liste des employés</h2>
+    {# grâce à doctrine on peut accéder directement à la collection d'employer sans avoir à passer
+    par une requête pour récupérer les informations #}
+    
+    {% if entreprise.employes | length > 0 %}
+        {% for employe in entreprise.employes %}
+            <a href="{{ path('show_employe', {'id':employe.id}) }}"> {{ employe }}</a> <br>
+        {% endfor %}
+    {% else %}
+        <p>Aucun salarié dans cette entreprise</p>
+    {% endif %}
+
+
+{% endblock %}
