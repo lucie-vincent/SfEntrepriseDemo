@@ -105,6 +105,8 @@ https://twig.symfony.com/
     {{ element }}
 {% endfor %}
 - concaténation: ~ ''
+- faire des liens vers une route du projet: (on utilise les names)
+<a href="{{ path('nom_route') }}"></a>
 
 ### Récupérer les objets de la base de données
 1. avec l'entityManager
@@ -116,5 +118,6 @@ https://twig.symfony.com/
 - on fait passer en argument de la méthode le repository de l'entité : index(EntrepriseRepository)
 - on importe la classe
 - on fait appel à la méthode du repository : $entreprises = $entrepriseRepository->findAll()
+- si on veut pouvoir ordonner les éléments, on utilise la méthode findBy qui prend des arguments
 
 

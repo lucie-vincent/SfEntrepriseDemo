@@ -34,7 +34,12 @@ class EntrepriseController extends AbstractController
     {
             // on récupère toutes les entreprises de la base de données
             // $entreprises = $entityManager->getRepository(Entreprise::class)->findAll();
-            $entreprises = $entrepriseRepository->findAll();
+            // $entreprises = $entrepriseRepository->findAll();
+
+            // on récupère les entreprises de la BDD et on les classe par ordre croissant
+            // pour ce faire on a besoin de la méthode findBy
+            // SELECT * FROM entreprise WHERE ville = 'STRASBOURG' ORDER BY raisonSociale
+            $entreprises = $entrepriseRepository->findBy(["ville" => "STRASBOURG"], ["raisonSociale" => "ASC"]);
 
             // on les envoie à travers la méthode render dans la vue index.html.twig: entreprise
         return $this->render('entreprise/index.html.twig', [
