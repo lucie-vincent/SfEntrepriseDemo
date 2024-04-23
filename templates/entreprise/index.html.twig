@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des entreprises{% endblock %}
+
+{% block body %}
+<h1>Liste des entreprises</h1>
+
+{% for entreprise in entreprises %}
+    {# on indique l'élément/ l'objet qu'on veut afficher dans l'équivalent du echo #}
+    {# on utilise le . pour faire référence au getter getRaisonSociale de l'entité Entreprise #}
+    {# on fait référence au nom de la propriété dans le projet et non le nom dans la BDD #}
+    {# <b>{{ entreprise.raisonSociale }}</b> {{' (' ~ entreprise.cp ~ ' ' ~ entreprise.ville ~ ')' }}<br> #}
+    
+    {# on a utilisé la méthode magique __toString donc on peut afficher la raison sociale + cp + ville #}
+    {{ entreprise}}<br>
+    {% endfor %}
+
+{% endblock %}
