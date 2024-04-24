@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Entreprise;
+use App\Form\EntrepriseType;
 use App\Repository\EntrepriseRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -47,6 +49,22 @@ class EntrepriseController extends AbstractController
             'entreprises' => $entreprises
         ]);
     }
+    
+    // on ajoute la route
+    #[Route('/entreprise/new', name: 'new_entreprise')]
+    public function new(Request $request): Response
+    {
+        // on crée un nouvel objet Entreprise
+        $entreprise = new Entreprise();
+       
+        // on attribue au formulaire les propriétés de cet objet
+        $form = $this->createForm(EntrepriseType::class, $entreprise);
+
+        // on renvoie à la vue les données
+        return $this->render('entreprise/new.html.twig', [
+            'formAddEntreprise' => $form,
+        ]);
+    }
 
     #[Route('/entreprise/{id}', name: 'show_entreprise')]
     // le paramConverter nous est utile pour récupérer l'id de l'objet qui a été passé en paramètre de show: ici Entreprise $entreprise et l'id de la route
@@ -58,4 +76,6 @@ class EntrepriseController extends AbstractController
             'entreprise' => $entreprise
         ]);
     }
+
+
 }

@@ -1,12 +1,19 @@
 # À noter
 
 - **Composer** est un gestionnaire de dépendance. C'est par lui qu'on passe dans l'invite de commande si on veut rajouter des bundles
+- les composants de Symfony : le systeme de routage, le système de controller, le système de gestion de dépendence, de formulaire, de templating, de tests unitaires et de tests fonctionnels
+- le système de routing : fait correspondre une url entrante avec des actions spécifiques de controller.
+- un controller est une classe qui va gérer les requetes http entrantes et retourne une réponse http
+- Les dépendances de symfony sont gérées à l'aide du container de services de symfony; on peut faire appel à un gestionnaire de dépendance de type NPN et Composer, des gestionnaires de dépendance, qui nous permettent de télécharger les dépendances nécessaires
+- on fait les formulaires à l'aide du composant Form: on crée des classes de formulaire. On les utilise dans le controller pour traiter les données soumises par l'utilisateur
+- Doctrine : ORM Object-Relational Mapping : permet d'intéragir avec la base de données et de représenter les entités (classes) sous forme d'objets
 
 ## le dossier **src**
 - C'est ici qu'on retrouve la logique métier
 - symfony fonctonne avec le design pattern MVC - Model Vue Controller
 - la couche **Model** est assurée par les dossiers *Entity* et *Repository*
 - les **Vues** sont stockées dans *templates*
+- pour être plus précis: model MVP - variante de MVC : le Model ne communique pas avec les vues
 ### Le sous-dossier **Controller**
 - c'est ici que se trouvent les controllers
 ### Le sous-dossier **Entity**
@@ -76,18 +83,19 @@
 1. préparer la migration *symfony console make:migration (ou m:mi)*
 2. effectuer la migration *symfony console doctrine:migrations:migrate (ou d:m:m)*
 
+## Le routage
+-[dans Forum : on faisait appel au méthode du controller en passant par l'URL : index.php?ctrl&action=nomMethode&id]
+- ex : #[Route('/lucky/number/{max}', name: 'app_lucky_number')]
+        #[Route('/url->nomController/{variable-argument}', name: 'permet de créer des liens vers la méthode' )]
+- redirection : $this->redirectToRoute('name dans la route');
+**NOTE** - chaque name de route doit être différent dans l'intégralité du projet
+        - il y a un ordre de priorité dans les routes : attention à mettre les méthodes avec un  id en argument en dernier
+
 ## Les Controllers
 https://symfony.com/doc/current/controller.html
 ### Composition d'un Controller
 - déclaration du Controller
 - méthodes qui composent le Controller
-### Le routage
--[dans Forum : on faisait appel au méthode du controller en passant par l'URL : index.php?ctrl&action=nomMethode&id]
-- ex : #[Route('/lucky/number/{max}', name: 'app_lucky_number')]
-        #[Route('/url->nomController/nomMethode/{variable-argument}', name: 'permet de créer des liens vers la méthode' )]
-- redirection : $this->redirectToRoute('name dans la route');
-**NOTE** chaque name de route doit être différent dans l'intégralité du projet
-
 ### créer les Controllers
 - on utilise la commande : *symfony console make:controller NomController (ou m:con)* . On peut préciser si on le souhaite le nom du Controller par la suite et pas dans cette commande directement
 - Symfony crée le Controller et également une vue dans templates/nomController/index.html.twig
@@ -124,7 +132,7 @@ https://twig.symfony.com/
 
 ## Modifier une entité et mettre à jour la BDD
 - on utilise la commande *symfony console make:entity* pour modifier l'entité; on remplit les champs de propriété que l'on veut modifier
-- on met à jour la BDD avec la commande *symfony console doctrine:schema:update --force*
+- on met à jour la BDD avec la commande *symfony console doctrine:schema:update --force* **IMPORTANT** faire une migration supprimerait les données déjà existantes dans la base de données !!
 
 ## lister le détail d'une entreprise
 - on crée la méthode show dans le Controller
@@ -141,3 +149,22 @@ https://twig.symfony.com/
 - on appelle cette méthode dans la vue pour afficher la date formatée
 2. utiliser un filter twig (filter) :| date("d-m-Y")
 - {{ entreprise.dateCreation | date("d-m-Y") }}
+
+## les formulaires
+- on utilise la commande *symfony console make:form*
+- on nomme généralement les classes qui vont gérer les formulaires nomClasseType
+- on peut créer un formulaire qui n'est pas lié à une entité
+- Symfony crée un nouveau sous-dossier dans *src* qui est *form* avec le fichier qui contient la classe qui va gérer le formulaire
+- Symfony crée 2 méthodes dans cette classe : buildForm() et configureOptions()
+- buildForm() récupère toutes les propriétés de l'entité
+### créer un formulaire
+- on crée la méthode dans le Controlleraprès avoir créé les classes qui vont gérer les formulaires
+- on importe la classe httpFoundation/Request + la classe NomType
+- on ajoute la route avec pour l'url: /nomController/nomMethode + le name: exemple_nomController
+- on crée un nouvel objet 
+- on attribue au formulaire les propriétés de cet objet
+- on renvoie à la vue les données
+- dans la vue, on récupère le formulaire avec la fonction {{ form(variable) }}
+- on précise le type souhaité pour chaque champ dans les FormType et on importe les classe symfony/component/form. On ajoute le bouton de soumission de type SubmitType
+- pour les objets : on précise le type EntityType + 1 tableau d'arugments qui comprend : classe de l'objet + choix du label (opitionnel si on a bien défini le __toString)
+- pour améliorer l'aspect des formulaire, on peut ajouter des attributs directement dans les inputs du FormType. Ici, on reprend les attributs bootstrap. Ces attributs sont des tableaux qui prennent d'autres tableaux en arguments
