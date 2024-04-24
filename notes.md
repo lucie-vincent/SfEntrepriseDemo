@@ -172,3 +172,5 @@ https://twig.symfony.com/
 - la méthode handleRequest() prend en compte la soumission du formulaire
 - puis avec la méthode isSubmitted(), si le formulaire est soumis, on affecte les données à l'objet
 - on utilise le EntityManager qui est en argument dans la méthode du formulaire pour préparer (persist) et exécuter (flush) la requête dans la BDD : càd ajouter les données saisies du formulaire dans le BDD
+### Mise en forme des formulaires
+- avec les fonctions {{ form_start/end }} + {{ form_row(nomForm.nomChamp) }} on peut mettre en page le formulaire
