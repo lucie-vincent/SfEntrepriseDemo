@@ -52,10 +52,14 @@ class EntrepriseController extends AbstractController
     
     // on ajoute la route
     #[Route('/entreprise/new', name: 'new_entreprise')]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/entreprise/{id}/edit', name: 'edit_entreprise')]
+    public function new_edit(Entreprise $entreprise = null, Request $request, EntityManagerInterface $entityManager): Response
     {
-        // on crée un nouvel objet Entreprise
-        $entreprise = new Entreprise();
+        // si l'entreprise n'existe pas
+        if(!$entreprise){
+            // on crée un nouvel objet Entreprise
+            $entreprise = new Entreprise();
+        }
        
         // on attribue au formulaire les propriétés de cet objet
         $form = $this->createForm(EntrepriseType::class, $entreprise);
@@ -83,7 +87,22 @@ class EntrepriseController extends AbstractController
         // on renvoie à la vue les données
         return $this->render('entreprise/new.html.twig', [
             'formAddEntreprise' => $form,
+            // on ajoute en données l'id de l'entreprise car si l'entreprise n'existe pas, cela renverra un booléen à false
+            // et on pourra s'en servir pour afficher correctement le titre de la page en fonction de l'ajout ou de l'edit
+            'edit' => $entreprise->getId()
         ]);
+    }
+
+    #[Route('/entreprise/{id}/delete', name: 'delete_entreprise')]
+    public function delete(Entreprise $entreprise, EntityManagerInterface $entityManager)
+    {
+        // Doctrine prépare (persiste) la requête
+        $entityManager->remove($entreprise);
+        // Doctrine exécute la requête : "DELETE FROM entreprise WHERE entreprise..."
+        $entityManager->flush();
+        
+        // on redirige vers la liste des entreprises
+        return $this->redirectToRoute('app_entreprise');
     }
 
     #[Route('/entreprise/{id}', name: 'show_entreprise')]

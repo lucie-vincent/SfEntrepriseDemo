@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Employe;
+use App\Entity\Entreprise;
 use App\Form\EmployeType;
 use App\Repository\EmployeRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,10 +32,13 @@ class EmployeController extends AbstractController
 
     // on ajoute la route
     #[Route('/employe/new', name: 'new_employe')]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/employe/{id}/edit', name: 'edit_employe')]
+    public function new_edit(Employe $employe = null, Request $request, EntityManagerInterface $entityManager): Response
     {
-        // on crée un nouvel objet employe
-        $employe = new Employe();
+        if(!$employe){
+            // on crée un nouvel objet employe
+            $employe = new Employe();
+        }
 
         // on attribue au formulaire les propriétés de cet objet
         $form = $this->createForm(EmployeType::class, $employe);
@@ -58,11 +62,24 @@ class EmployeController extends AbstractController
             // on redirige vers la liste des employes
             return $this->redirectToRoute('app_employe');
         }
-
+        
         // on renvoie à la vue les données
         return $this->render('employe/new.html.twig', [
             'formAddEmploye' => $form,
+            'edit' => $employe->getId()
         ]);
+    }
+    
+    #[Route('/employe/{id}/delete', name: 'delete_employe')]
+    public function delete(Employe $employe, EntityManagerInterface $entityManager)
+    {
+        // Doctrine prépare (persiste) la requête
+        $entityManager->remove($employe);
+        // Doctrine exécute la requête : "DELETE FROM employe WHERE employe..."
+        $entityManager->flush();
+        
+        // on redirige vers la liste des employes
+        return $this->redirectToRoute('app_employe');
     }
 
 

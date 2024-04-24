@@ -47,6 +47,9 @@
 
 # Marche à suivre
 **NOTE** Ctrl + C permet d'arrêter la commande en cours
+**NOTE**  symfony server:stop permet d'arreter le serveur
+**NOTE**  symfony server:start -d permet de démarrer le serveur en gardant la main dessus (pouvoir effectuer des lignes de commande)
+
 
 ## lancer le serveur symfony
 - on lance le serveur depuis l'invite de commande grâce à la commande *symfony serve -d*. On vérifie ainsi qua page d'acceuil de Symfony s'affiche bien lorsqu'on se connecte à l'adresse indiquée dans l'affiche de commande.
@@ -74,6 +77,7 @@
 - on définit la relation Orphan (ou non): si on supprime l'entreprise, les employes sont supprimés également
 
 ## définir la chaine de connexion à la BDD 
+dans le fichier .env :
 - on commente la ligne qui donne l'accès à postgresql
 - on décommente la ligne qui donne accès à mysql
 - on modifie le nom d'utilisateur :root (pas de mdp) + @ + le serveur local = le localhost (127.0.0.1) + port par défaut(:3306 - à vérifier sur laragon) + / + le nom de la BDD
@@ -174,3 +178,16 @@ https://twig.symfony.com/
 - on utilise le EntityManager qui est en argument dans la méthode du formulaire pour préparer (persist) et exécuter (flush) la requête dans la BDD : càd ajouter les données saisies du formulaire dans le BDD
 ### Mise en forme des formulaires
 - avec les fonctions {{ form_start/end }} + {{ form_row(nomForm.nomChamp) }} on peut mettre en page le formulaire
+
+## formulaire d'édition
+-  on peut utiliser la même méthode que l'ajout
+- on ajoute une nouvelle route avec l'id en plus
+- on modifie le nom de la méthode pour plus de clarté et indiquer l'édition 
+- on ajoute en argument l'objet qu'on veut modifier et on lui attribut une valeur nulle : le ParamConverter va trouver l'id qui correspond et bien l'attribuer si l'objet existe bien 
+- on ajoute un lien d'édition pour mener au formulaire dans la vue appropriée
+
+## supprimer un objet
+- on utilise la classe EntityManager Interface qui gère la base de données
+- on utilise les méthodes : remove() et flush() pour supprimer l'objet.
+- on fait la redirection vers la vue appropriée
+- c'est ici que la relation Orphan est importante : en fonction de ce qui est choisi, les éléments enfants sont également supprimés lors de la suppression de l'objet
