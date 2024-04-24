@@ -168,3 +168,7 @@ https://twig.symfony.com/
 - on précise le type souhaité pour chaque champ dans les FormType et on importe les classe symfony/component/form. On ajoute le bouton de soumission de type SubmitType
 - pour les objets : on précise le type EntityType + 1 tableau d'arugments qui comprend : classe de l'objet + choix du label (opitionnel si on a bien défini le __toString)
 - pour améliorer l'aspect des formulaire, on peut ajouter des attributs directement dans les inputs du FormType. Ici, on reprend les attributs bootstrap. Ces attributs sont des tableaux qui prennent d'autres tableaux en arguments
+### La soumission d'un formulaire
+- la méthode handleRequest() prend en compte la soumission du formulaire
+- puis avec la méthode isSubmitted(), si le formulaire est soumis, on affecte les données à l'objet
+- on utilise le EntityManager qui est en argument dans la méthode du formulaire pour préparer (persist) et exécuter (flush) la requête dans la BDD : càd ajouter les données saisies du formulaire dans le BDD

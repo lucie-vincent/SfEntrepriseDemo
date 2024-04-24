@@ -52,13 +52,33 @@ class EntrepriseController extends AbstractController
     
     // on ajoute la route
     #[Route('/entreprise/new', name: 'new_entreprise')]
-    public function new(Request $request): Response
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         // on crée un nouvel objet Entreprise
         $entreprise = new Entreprise();
        
         // on attribue au formulaire les propriétés de cet objet
         $form = $this->createForm(EntrepriseType::class, $entreprise);
+
+        // on traite la soumission du formulaire
+        // on utilise la méthode handleRequest()
+        $form->handleRequest($request);
+
+        // si le forumlaire a été soumis et que le formulaire est valide
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            // on récupère les données du formulaire et on les transmets à l'objet entreprise
+            $entreprise = $form->getData();
+
+            // on dit à Doctrine de persister càd préparer la requête pour l'ajout en BDD
+            $entityManager->persist($entreprise);
+
+            // Doctrine exécute la requête
+            $entityManager->flush();
+
+            // on redirige vers la liste des entreprises
+            return $this->redirectToRoute('app_entreprise');
+        }
 
         // on renvoie à la vue les données
         return $this->render('entreprise/new.html.twig', [
